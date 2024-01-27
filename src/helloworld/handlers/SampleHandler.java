@@ -12,6 +12,7 @@ import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.console.MessageConsole;
+import org.eclipse.ui.console.MessageConsoleStream;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class SampleHandler extends AbstractHandler {
@@ -21,43 +22,49 @@ public class SampleHandler extends AbstractHandler {
 
 		System.out.println("HelloWorld");
 
-		String relativePath = "lib/example_script.exe";
+		// Get or create the console of "Plugin"
+		MessageConsole pluginConsole = findConsole("Plugin");
+		// Get the console stream
+		MessageConsoleStream stream = pluginConsole.newMessageStream();
+
+		// TODO: Set the relative path of the executable
+		final String relativePath = "lib/example_script.exe";
+
+		// Get the file of the executable
 		File file = PluginResourceUtil.getPluginFile(relativePath);
-
+		// The file exists
 		if (file != null && file.exists()) {
-			System.out.println("File exists: " + file.getAbsolutePath());
-
 			// Executable path
-			String path = file.getAbsolutePath();
-			// The console used for displaying output
-			MessageConsole pluginConsole = findConsole("Plugin");
-
+			final String path = file.getAbsolutePath();
+			System.out.println("File exists: " + path);
 			// Start the background job
 			ProcessExecutableJob job = new ProcessExecutableJob("My Excutable Job", path, pluginConsole);
 			job.schedule();
 
 		} else {
-			System.out.println("File not found.");
+			// The file not exists
+			stream.println(" The executable file not found.");
 		}
 
+		// Provide the example of MessageDialog
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
 		MessageDialog.openInformation(window.getShell(), "HelloWorld", "Hello, Eclipse world");
 		return null;
 	}
 
-	// 辅助方法：根据名称查找控制台
+	// Find or create the console
 	private static MessageConsole findConsole(String name) {
-		// 获取所有控制台
+		// Get all consoles
 		IConsoleManager consoleManager = ConsolePlugin.getDefault().getConsoleManager();
 		IConsole[] consoles = consoleManager.getConsoles();
-		// 查到控制台
+		// Look up the console
 		for (IConsole console : consoles) {
 			if (console.getName().equals(name) && console instanceof MessageConsole) {
 				consoleManager.showConsoleView(console);
 				return (MessageConsole) console;
 			}
 		}
-		// 如果不存在，则创建新的控制台
+		// If not exist, then create one
 		MessageConsole console = new MessageConsole(name, null);
 		consoleManager.addConsoles(new IConsole[] { console });
 		consoleManager.showConsoleView(console);

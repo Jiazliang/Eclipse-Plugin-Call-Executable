@@ -12,22 +12,22 @@ import java.net.URL;
 
 public class PluginResourceUtil {
 
-    public static File getPluginFile(String relativePath) {
-        Bundle bundle = Platform.getBundle(Activator.getDefault().getBundle().getSymbolicName());
+	public static File getPluginFile(String relativePath) {
+		Bundle bundle = Platform.getBundle(Activator.getDefault().getBundle().getSymbolicName());
 
-        if (bundle != null) {
-            URL fileURL = bundle.getEntry(relativePath);
+		if (bundle != null) {
+			URL fileURL = bundle.getEntry(relativePath);
 
-            if (fileURL != null) {
-                try {
-                    URL resolvedFileURL = FileLocator.toFileURL(fileURL);
-                    return new File(resolvedFileURL.getFile());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+			if (fileURL != null) {
+				try {
+					URL resolvedFileURL = FileLocator.toFileURL(fileURL);
+					return new File(resolvedFileURL.getFile());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 }
