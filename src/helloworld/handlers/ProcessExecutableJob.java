@@ -7,7 +7,6 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleManager;
-import org.eclipse.ui.console.IOConsole;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
 
@@ -16,12 +15,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class ProcessOutputJob extends Job {
+public class ProcessExecutableJob extends Job {
 
+	private final String path;
     private final MessageConsole console;
 
-    public ProcessOutputJob(String name, MessageConsole console) {
+    public ProcessExecutableJob(String name, String path, MessageConsole console) {
         super(name);
+        this.path = path;
         this.console = console;
     }
 
@@ -29,8 +30,7 @@ public class ProcessOutputJob extends Job {
     protected IStatus run(IProgressMonitor monitor) {
         try {
             // 启动进程
-        	String exePath = "E:\\eclipse-workspace\\HelloWorld\\exe\\example_script.exe";
-            ProcessBuilder processBuilder = new ProcessBuilder(exePath);
+            ProcessBuilder processBuilder = new ProcessBuilder(path);
             Process process = processBuilder.start();
 
             // 处理进程的输出
