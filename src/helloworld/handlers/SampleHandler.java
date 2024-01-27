@@ -19,7 +19,7 @@ public class SampleHandler extends AbstractHandler {
 		System.out.println("HelloWorld");
 		
 		// Executable path
-		String path = "E:\\eclipse-workspace\\HelloWorld\\exe\\example_script.exe";
+		String path = "E:\\eclipse-workspace\\HelloWorld\\lib\\example_script.exe";
 		// The console used for displaying output
 	    MessageConsole pluginConsole = findConsole("Plugin");
 	    
